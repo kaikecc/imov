@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from telegram import Bot
 
 
-bot = Bot(token='bot6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
+bot = Bot(token='6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
 
 chat_id = '1222662328'
 
