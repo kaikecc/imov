@@ -8,8 +8,6 @@ bot = Bot(token='6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
 
 chat_id = '1222662328'
 
-
-
 # Cria a conexão com o banco de dados
 engine = create_engine('sqlite:///imoveis.db')
 
@@ -40,7 +38,6 @@ for i, bar in enumerate(bars):
 # Mostra o gráfico
 plt.xticks(rotation=90)
 plt.grid()
-plt.show()
 
 # Salva a figura
 plt.savefig('grafico.png', dpi=300, bbox_inches='tight')
@@ -50,3 +47,5 @@ try:
     bot.send_photo(chat_id=chat_id, photo=photo)
 finally:
     photo.close()
+
+plt.show()
