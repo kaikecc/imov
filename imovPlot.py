@@ -8,7 +8,7 @@ bot = Bot(token='6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
 
 chat_id = '1222662328'
 
-chat_id = 'YOUR_CHAT_ID'
+
 
 # Cria a conexão com o banco de dados
 engine = create_engine('sqlite:///imoveis.db')
