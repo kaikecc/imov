@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from telegram import Bot
 
 
-bot = Bot(token='6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
+bot = Bot(token='bot6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
 
 chat_id = '1222662328'
 
@@ -33,19 +33,15 @@ ax.set_title('Relação entre Localização, Valor e Quantidade de Apartamentos'
 for i, bar in enumerate(bars):
     height = bar.get_height()
     ax.text(bar.get_x() + bar.get_width() / 2., height, str(df_grouped['count'][i]), ha='center', va='bottom')
-    
 
 # Mostra o gráfico
 plt.xticks(rotation=90)
 plt.grid()
 
 # Salva a figura
-plt.savefig('grafico.png', dpi=300, bbox_inches='tight')
+figname = 'grafico.png'
+plt.savefig(figname, dpi=300, bbox_inches='tight')
 
-try:
-    photo = open('grafico.png', 'rb')
+# Envia a imagem pelo Telegram
+with open(figname, 'rb') as photo:
     bot.send_photo(chat_id=chat_id, photo=photo)
-finally:
-    photo.close()
-
-plt.show()
