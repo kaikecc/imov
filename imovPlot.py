@@ -1,11 +1,9 @@
 from sqlalchemy import create_engine
 import pandas as pd
 import matplotlib.pyplot as plt
-from telegram import Bot
-
+from telegram import Bot, InputFile
 
 bot = Bot(token='6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
-
 chat_id = '1222662328'
 
 # Cria a conexão com o banco de dados
@@ -44,4 +42,4 @@ plt.savefig(figname, dpi=300, bbox_inches='tight')
 
 # Envia a imagem pelo Telegram
 with open(figname, 'rb') as photo:
-    bot.send_photo(chat_id=chat_id, photo=photo)
+    bot.send_photo(chat_id=chat_id, photo=InputFile(photo))
