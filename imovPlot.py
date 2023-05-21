@@ -4,10 +4,11 @@ import matplotlib.pyplot as plt
 from telegram import Bot
 
 
-bot = Bot(token='AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
+bot = Bot(token='6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA')
 
 chat_id = '1222662328'
 
+chat_id = 'YOUR_CHAT_ID'
 
 # Cria a conexão com o banco de dados
 engine = create_engine('sqlite:///imoveis.db')
@@ -20,12 +21,6 @@ df_apartamento = df_julio[df_julio['Título'].str.contains('Apartamento')]
 
 # Agrupa os imóveis por localização e calcula a média e quantidade de apartamentos de cada grupo
 df_grouped = df_apartamento.groupby('Localização')['Valor'].agg(['mean', 'count']).sort_values('count', ascending=False)
-
-
-#df_apartamento = df_julio[df_julio['Título'].str.contains('Apartamento')]
-
-# Agrupa os imóveis por localização e calcula a média e quantidade de apartamentos de cada grupo
-#df_grouped = df_apartamento.groupby('Localização')['Valor'].agg(['mean', 'count']).sort_values('count', ascending=False)
 
 # Cria o gráfico de barras
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -44,16 +39,14 @@ for i, bar in enumerate(bars):
 
 # Mostra o gráfico
 plt.xticks(rotation=90)
+plt.grid()
+plt.show()
 
 # Salva a figura
 plt.savefig('grafico.png', dpi=300, bbox_inches='tight')
 
-photo = open('grafico.png', 'rb')
-
-bot.send_photo(chat_id=chat_id, photo=photo)
-
-photo.close()
-
-plt.grid()
-plt.show()
-
+try:
+    photo = open('grafico.png', 'rb')
+    bot.send_photo(chat_id=chat_id, photo=photo)
+finally:
+    photo.close()
