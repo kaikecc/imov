@@ -48,7 +48,7 @@ plt.xticks(rotation=90)
 # Salva a figura
 plt.savefig('grafico.png', dpi=300, bbox_inches='tight')
 
-photo = open('grafico.pn', 'rb')
+photo = open('grafico.png', 'rb')
 
 bot.send_photo(chat_id=chat_id, photo=photo)
 
