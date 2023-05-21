@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Cria a conexão com o banco de dados
 engine = create_engine('sqlite:///imoveis.db')
