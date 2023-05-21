@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 import pandas as pd
 
 # Cria a conexão com o banco de dados
-engine = create_engine('sqlite://imoveis.db')
+engine = create_engine('sqlite:///imoveis.db')
 
 # Carrega os dados da tabela 'julio' no DataFrame
 df_julio = pd.read_sql_table('julio', con=engine)
