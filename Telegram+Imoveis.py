@@ -5,11 +5,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 from io import BytesIO
 from datetime import datetime
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+
+arquivo = open("token.txt")
+token = arquivo.read()
+
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Olá, Estou processando o gráfico!')
+    imoveis()
+
+def echo(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text(update.message.text)
 
 
 def sendImage(image_stream):
     # Configurar o URL e os dados para enviar a imagem via Telegram
-    url = "https://api.telegram.org/bot6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA/sendPhoto"
+    url = "https://api.telegram.org/bot" + token + "/sendPhoto"
     files = {'photo': ('image.png', image_stream, 'image/png')}
     data = {'chat_id': "1222662328"}
 
@@ -89,7 +101,7 @@ def extract_imoveis_info(url_template):
     df_julio = pd.DataFrame(dados)
 
     # convertendo a coluna 'Valor' para float
-    #df_julio['Valor'] = df_julio['Valor'].str.replace('R\$', '').str.replace(',', '').str.replace('[^0-9]', '', regex=True).str.replace(' ', '').astype(float) / 100
+    
     df_julio['Valor'] = df_julio['Valor'].str.replace('R\$', '').str.replace(',', '').str.replace('[^0-9]', '', regex=True).str.replace(' ', '')
     df_julio['Valor'] = df_julio['Valor'].replace('', '0').astype(float) / 100
     
@@ -106,13 +118,13 @@ def plot_imoveis(df):
 
 
     fig, ax = plt.subplots(figsize=(10, 8))
-    bars1 = ax.bar(df_grouped.index, df_grouped['min'], color='red', alpha=0.5)
-    bars2 = ax.bar(df_grouped.index, df_grouped['max']-df_grouped['min'], bottom=df_grouped['min'], color='blue', alpha=0.5)
+    bars1 = ax.bar(df_grouped.index, df_grouped['min'], color='red', alpha=0.5, label = 'Mín. Valor')
+    bars2 = ax.bar(df_grouped.index, df_grouped['max']-df_grouped['min'], bottom=df_grouped['min'], color='blue', alpha=0.5, label = 'Máx. Valor')
 
     data_hora_atual = datetime.now()
     ax.set_xlabel('Bairros de Brusque-SC')
     ax.set_ylabel('Valor (R$)')
-    ax.set_title('Apartamentos em Brusque-SC (Julio Iméveis) / ' + str(data_hora_atual))
+    ax.set_title('Apartamentos em Brusque-SC (Julio Imóveis) / ' + str(data_hora_atual))
 
     # Adiciona as informações de quantidade de apartamentos acima de cada barra
     for i, bar in enumerate(bars2):        
@@ -120,12 +132,10 @@ def plot_imoveis(df):
         ax.text(bar.get_x() + bar.get_width() / 2., height, str(df_count['count'][i]), ha='center', va='bottom')
 
     # Adiciona a linha com a média de valores
-    line = ax.plot(df_grouped.index, df_mean.values, color='green', marker='o')
+    line = ax.plot(df_grouped.index, df_mean.values, color='green', marker='o',label = 'Média Valor')
+    ax.legend()
 
-     # Reposiciona o gráfico no topo
-    #fig.tight_layout(pad=0.5)  # Ajusta as margens da figura
-
-
+   
     box = ax.get_position()
     new_width = box.width 
     new_height = box.height * 0.75
@@ -136,6 +146,7 @@ def plot_imoveis(df):
    
     # Mostra o gráfico
     plt.xticks(rotation=90)
+    plt.legend()
     plt.grid()
     
 
@@ -149,11 +160,21 @@ def plot_imoveis(df):
     #plt.show()
 
 
-def main():
+def imoveis():
     url_template = 'https://www.julioimoveis.com.br/busca?estado=1&cidade=7&valor-min=&valor-max=&operacao=venda&dormitorios%5B%5D=&area-min=&area-max=&page={}'
     df_julio = extract_imoveis_info(url_template)
     plot_imoveis(df_julio)
 
 
-# Chamar a função principal
-main()
+def main() -> None:
+    updater = Updater(token, use_context=True)
+    dispatcher = updater.dispatcher
+
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
