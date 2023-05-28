@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 
-token = '6274563938:AAE_sZNggKL5le7Zlw3s-U-edOkNzNa-mnA'
+token = ''
 updater = Updater(token=token, use_context=True)
 
 def send_graph(update: Update, context: CallbackContext):
