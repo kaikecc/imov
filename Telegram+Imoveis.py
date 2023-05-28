@@ -8,8 +8,9 @@ from datetime import datetime
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
-arquivo = open("token.txt")
-token = arquivo.read()
+with open("/content/drive/MyDrive/token.txt", "r") as f:
+    token = f.read().strip()
+
 
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Olá, Estou processando o gráfico!')
